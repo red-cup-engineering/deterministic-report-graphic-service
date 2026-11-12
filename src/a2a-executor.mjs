@@ -1,6 +1,6 @@
 import { Message, Role } from "@a2a-js/sdk";
 import { extractRmnPart, rmnPart } from "@red-cup-engineering/a2a-rmn-part-service";
-import { createSettlementStore } from "@lenticule-science/witness-journal-rdf-projection-service/client";
+import { recordSettlementRecord } from "@red-cup-engineering/witness-journal-document-service";
 import { renderDeterministicReportGraphic } from "./deterministic-report-graphic.mjs";
 import { OPERATION_KIND, admit, identify } from "./semantic-content.mjs";
 
@@ -12,8 +12,7 @@ const exact = (value) => value?.id === id(Object.fromEntries(Object.entries(valu
 export const operationBytes = (value) => identify(value, OPERATION_KIND).bytes;
 export function operationFromBytes(bytes) { return admit(bytes, OPERATION_KIND); }
 async function recordResult(value, recordedAt) {
-  const store = createSettlementStore({ settlementRoot: ROOT, agentUrl: process.env.WITNESS_JOURNAL_RDF_AGENT });
-  return store.record({ category: "rendering-outcomes", recordedAt, record: value });
+  return recordSettlementRecord({ agentUrl: process.env.WITNESS_JOURNAL_RDF_AGENT, settlement: null, actor: ACTOR, category: "rendering-outcomes", recordedAt, record: value });
 }
 export async function executeOperation(request, options = {}) {
   if (!exact(request) || request.type !== "DeterministicReportGraphicOperation" || request.provider !== ACTOR || request.packet?.type !== "HarmoniousUnionDeltaPacket") throw new Error("exact provider-addressed canonical RMN graphic operation is required");
