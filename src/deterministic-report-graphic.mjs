@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { makeNiUri as rawNiUri } from "@red-cup-engineering/uri-services-section/ni-uri";
+import { makeNiUri as rawNiUri } from "@red-cup-engineering/uri-engineering-services-section/ni-uri";
 import { deflateSync } from "node:zlib";
 import { RECORD_KIND, identify } from "./semantic-content.mjs";
 
